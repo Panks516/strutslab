@@ -17,15 +17,28 @@
  */
 package org.superbiz.struts;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import java.util.Properties;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FindUser {
 
     private int id;
     private String errorMessage;
     private User user;
+    private UserService userService;
+
+
+    public FindUser(UserService userService) {
+        this.userService = userService;
+    }
+
+
+    /*public FindUser(int id, String errorMessage, User user, UserService userService) {
+        this.id = id;
+        this.errorMessage = errorMessage;
+        this.user = user;
+        this.userService = userService;
+    }*/
 
     public User getUser() {
         return user;
@@ -50,17 +63,17 @@ public class FindUser {
     public void setId(int id) {
         this.id = id;
     }
-
+    //@Transactional
     public String execute() {
 
         try {
-            UserService service = null;
+            /*UserService service = null;
             Properties props = new Properties();
             props.put(Context.INITIAL_CONTEXT_FACTORY,
                 "org.apache.openejb.core.LocalInitialContextFactory");
             Context ctx = new InitialContext(props);
-            service = (UserService) ctx.lookup("UserServiceImplLocal");
-            this.user = service.find(id);
+            service = (UserService) ctx.lookup("UserServiceImplLocal");*/
+            this.user = userService.find(id);
         } catch (Exception e) {
             this.errorMessage = e.getMessage();
             return "failure";
